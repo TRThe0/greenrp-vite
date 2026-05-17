@@ -11,6 +11,8 @@ export default function Login() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
+  const logoSrc = 'https://via.placeholder.com/68/00e676/FFFFFF?text=G'
+  const localLogoPath = '/login-photo.jpg'
   async function handleLogin() {
     if (!username || !password) { setError('Preencha usuário e senha.'); return }
     setLoading(true); setError('')
@@ -27,7 +29,7 @@ export default function Login() {
     <div style={{ minHeight: '100vh', background: '#080c10', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, backgroundImage: 'radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,230,118,0.07) 0%,transparent 70%)' }}>
       <div style={{ width: '100%', maxWidth: 420 }} className="fade-up">
         <div style={{ textAlign: 'center', marginBottom: 36 }}>
-          <div style={{ width: 68, height: 68, borderRadius: 18, background: 'linear-gradient(135deg,#00e676,#00c853)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 30, fontWeight: 800, color: '#080c10', fontFamily: 'Syne,sans-serif', marginBottom: 14, boxShadow: '0 0 40px rgba(0,230,118,0.3)' }}>G</div>
+          <img src={localLogoPath} onError={(e) => { (e.currentTarget as HTMLImageElement).src = logoSrc }} alt="Logo" style={{ width: 68, height: 68, borderRadius: 18, objectFit: 'cover', display: 'inline-block', marginBottom: 14, boxShadow: '0 0 40px rgba(0,230,118,0.3)' }} />
           <div style={{ fontFamily: 'Syne,sans-serif', fontSize: 26, fontWeight: 700, color: '#f0f4f8' }}>Green RP</div>
           <div style={{ fontSize: 14, color: '#6b7f93', marginTop: 4 }}>Painel</div>
         </div>
