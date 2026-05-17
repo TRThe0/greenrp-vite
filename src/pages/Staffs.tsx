@@ -60,7 +60,7 @@ export default function Staffs() {
   function openPromo(s: any) { setPromovendo(s); setPromoForm({ cargo: s.cargo, setores: Array.isArray(s.setor) ? s.setor : [s.setor] }); setModalPromo(true) }
 
   async function save() {
-    const payload = { nome: form.nome, username: form.username, cargo: form.cargo, setor: form.setores || ['Suporte'], carga: form.carga, carga_max: form.carga_max || null, perm: form.perm, cupom: form.cupom?.toUpperCase(), pct: Number(form.pct), entrada: form.entrada, id_rp: form.id_rp ? Number(form.id_rp) : null }
+    const payload = { nome: form.nome, username: form.username, cargo: form.cargo, setor: form.setores || ['Suporte'], carga: form.carga, carga_max: form.carga_max || null, perm: form.perm, cupom: form.cupom?.toUpperCase(), pct: Number(form.pct), entrada: form.entrada, ultima_promo: form.ultima_promo || null, id_rp: form.id_rp ? Number(form.id_rp) : null }
     if (editing) {
       if (form.senha) Object.assign(payload, { senha: hashPass(form.senha) })
       await supabase.from('staffs').update(payload).eq('id', editing.id)
@@ -176,7 +176,8 @@ export default function Staffs() {
           <div><label style={{ fontSize: 12, color: '#6b7f93', display: 'block', marginBottom: 6 }}>ID do RP</label><input style={inp} type="number" value={form.id_rp || ''} onChange={sf('id_rp')} placeholder="Ex: 4821" /></div>
           <div><label style={{ fontSize: 12, color: '#6b7f93', display: 'block', marginBottom: 6 }}>Cupom</label><input style={inp} value={form.cupom || ''} onChange={e => setForm((f: any) => ({ ...f, cupom: e.target.value.toUpperCase() }))} placeholder="STAFFCODE" /></div>
           <div><label style={{ fontSize: 12, color: '#6b7f93', display: 'block', marginBottom: 6 }}>% Cupom</label><input style={inp} type="number" value={form.pct || ''} onChange={sf('pct')} placeholder="10" /></div>
-          <div style={{ gridColumn: '1/-1' }}><label style={{ fontSize: 12, color: '#6b7f93', display: 'block', marginBottom: 6 }}>Entrada</label><input style={inp} type="date" value={form.entrada || ''} onChange={sf('entrada')} /></div>
+          <div><label style={{ fontSize: 12, color: '#6b7f93', display: 'block', marginBottom: 6 }}>Entrada</label><input style={inp} type="date" value={form.entrada || ''} onChange={sf('entrada')} /></div>
+          <div><label style={{ fontSize: 12, color: '#6b7f93', display: 'block', marginBottom: 6 }}>Última Promoção</label><input style={inp} type="date" value={form.ultima_promo || ''} onChange={sf('ultima_promo')} /></div>
         </div>
       </Modal>
 
