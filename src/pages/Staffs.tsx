@@ -43,7 +43,7 @@ export default function Staffs() {
   useEffect(() => { load() }, [])
 
   async function load() {
-    const { data } = await supabase.from('staffs').select('*').order('id')
+    const { data } = await supabase.from('staffs').select('*').order('id').limit(1000)
     setStaffs(data || [])
   }
 
@@ -144,7 +144,7 @@ export default function Staffs() {
                   <td style={{ padding: '14px 18px', fontSize: 13, color: '#f0f4f8' }}>
                     {s.carga_max ? `${s.carga} - ${s.carga_max}` : `${s.carga}`}
                   </td>
-                  <td style={{ padding: '14px 18px' }}><span style={{ fontFamily: 'monospace', fontSize: 12, fontWeight: 700, color: '#ffa502' }}>{s.cupom}</span><span style={{ fontSize: 11, color: '#6b7f93', marginLeft: 6 }}>{s.pct}%</span></td>
+                  <td style={{ padding: '14px 18px' }}><span style={{ fontFamily: 'monospace', fontSize: 12, fontWeight: 700, color: '#ffa502' }}>{s.cupom || '—'}</span>{s.cupom && <span style={{ fontSize: 11, color: '#6b7f93', marginLeft: 6 }}>{s.pct}%</span>}</td>
                   <td style={{ padding: '14px 18px', fontSize: 13, color: '#a8b8c8' }}>{formatDate(s.entrada)}</td>
                   <td style={{ padding: '14px 18px', fontSize: 13, color: '#b388ff', fontWeight: 500 }}>{formatDate(s.ultima_promo) || '—'}</td>
                   <td style={{ padding: '14px 18px' }}>
