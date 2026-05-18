@@ -45,7 +45,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <div style={{ padding: '22px 18px 18px', borderBottom: '1px solid #1e2d3d' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ width: 38, height: 38, borderRadius: 10, background: 'linear-gradient(135deg,#00e676,#00c853)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: 16, color: '#080c10', flexShrink: 0 }}>G</div>
-            <div><div style={{ fontFamily: 'Syne,sans-serif', fontSize: 16, fontWeight: 700, color: '#f0f4f8' }}>Green RP</div><div style={{ fontSize: 11, color: '#6b7f93' }}>Staff Panel</div></div>
+            <div><div style={{ fontFamily: 'Syne,sans-serif', fontSize: 16, fontWeight: 700, color: '#f0f4f8' }}>Green RP</div><div style={{ fontSize: 11, color: '#6b7f93' }}>Staff Painel</div></div>
           </div>
         </div>
         <nav style={{ flex: 1, padding: 10 }}>
