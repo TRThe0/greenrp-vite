@@ -26,7 +26,7 @@ export default function Login() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, position: 'relative', overflow: 'hidden' }}>
       {/* Imagem de fundo */}
-      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(/bg.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', filter: 'brightness(0.35)' }} />
+      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(https://i.imgur.com/6P3cxyj.jpeg)', backgroundSize: 'cover', backgroundPosition: 'center', filter: 'brightness(0.35)' }} />
       {/* Overlay escuro */}
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(8,12,16,0.7) 100%)' }} />
       <div style={{ width: '100%', maxWidth: 420, position: 'relative', zIndex: 1 }} className="fade-up">
