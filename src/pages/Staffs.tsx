@@ -11,13 +11,12 @@ const SC: Record<string,string> = {Ilegal:'#ff4757',Legal:'#2ed573',Policia:'#1e
 const CARGO_CORES: Record<string, string> = {
   'Head Staff': '#00e5ff',
   'HS': '#00e5ff',
-  'Administrator': '#ff1744',
   'Admin': '#ff1744',
   'Moderator': '#3d5afe',
-  'Support': '#00e676',
+  'Support': '#07f713',
   'Helper': '#d500f9',
-  'CEO': '#070707',
-  'C-': '#0c0c0c',
+  'CEO': '#363636',
+  'C-': '#3a3a3a',
   'Diretor': '#ff6348',
   'Trial': '#a8b8c8',
 }
