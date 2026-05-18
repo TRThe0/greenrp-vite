@@ -29,6 +29,8 @@ function getCargoCor(cargo: string): string {
   const colors = ['#ff6b81','#70a1ff','#7bed9f','#eccc68','#a29bfe','#fd79a8','#55efc4','#fdcb6e','#e17055','#74b9ff']
   return colors[Math.abs(h) % colors.length]
 }
+
+function SetorBadges({ setor }: { setor: string | string[] }) {
   const list = Array.isArray(setor) ? setor : [setor]
   return <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
     {list.map(s => <span key={s} style={{ padding: '3px 10px', borderRadius: 99, fontSize: 11, fontWeight: 600, color: SC[s] || '#a8b8c8', background: (SC[s] || '#888') + '22', border: `1px solid ${(SC[s] || '#888')}33`, whiteSpace: 'nowrap' }}>{s}</span>)}
@@ -136,7 +138,7 @@ export default function Staffs() {
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead><tr style={{ background: '#161f2a' }}>
-              {['Staff', 'Cargo', 'Setor(es)', 'Status', 'ID RP', 'Carga', 'Cupom', 'Entrada', 'Última Promoção', 'Ações'].map(h => (
+              {['Staff', 'Cargo', 'Setor(es)', 'Status', 'ID RP', 'Disponibilidade', 'Cupom', 'Entrada', 'Última Promoção', 'Ações'].map(h => (
                 <th key={h} style={{ padding: '12px 18px', textAlign: 'left', fontSize: 11, fontWeight: 600, color: '#6b7f93', letterSpacing: '0.8px', textTransform: 'uppercase', borderBottom: '1px solid #1e2d3d', whiteSpace: 'nowrap' }}>{h}</th>
               ))}
             </tr></thead>
