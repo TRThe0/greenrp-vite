@@ -8,7 +8,27 @@ import { getSession } from '../lib/auth'
 const SETORES = ['Ilegal','Legal','Policia','Denuncia','Kids','SS','Evento','Criadores','Administração','Suporte']
 const SC: Record<string,string> = {Ilegal:'#ff4757',Legal:'#2ed573',Policia:'#1e90ff',Denuncia:'#ff6348',Kids:'#ff6eb4',SS:'#eccc68',Evento:'#4facfe',Criadores:'#b388ff',Administração:'#ffa502',Suporte:'#00e676'}
 
-function SetorBadges({ setor }: { setor: string | string[] }) {
+const CARGO_CORES: Record<string, string> = {
+  'CEO': '#ffd700',
+  'Administrador': '#ffa502',
+  'Administrador-Chefe': '#ff6348',
+  'Diretor': '#ff4757',
+  'Moderador': '#00e676',
+  'Moderador Sênior': '#2ed573',
+  'Suporte': '#4facfe',
+  'Helper': '#b388ff',
+  'Trial': '#a8b8c8',
+  'HS': '#eccc68',
+}
+
+function getCargoCor(cargo: string): string {
+  if (CARGO_CORES[cargo]) return CARGO_CORES[cargo]
+  // Gera cor baseada no texto
+  let h = 0
+  for (let i = 0; i < cargo.length; i++) { h = ((h << 5) - h) + cargo.charCodeAt(i); h |= 0 }
+  const colors = ['#ff6b81','#70a1ff','#7bed9f','#eccc68','#a29bfe','#fd79a8','#55efc4','#fdcb6e','#e17055','#74b9ff']
+  return colors[Math.abs(h) % colors.length]
+}
   const list = Array.isArray(setor) ? setor : [setor]
   return <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
     {list.map(s => <span key={s} style={{ padding: '3px 10px', borderRadius: 99, fontSize: 11, fontWeight: 600, color: SC[s] || '#a8b8c8', background: (SC[s] || '#888') + '22', border: `1px solid ${(SC[s] || '#888')}33`, whiteSpace: 'nowrap' }}>{s}</span>)}
@@ -131,7 +151,9 @@ export default function Staffs() {
                       <div><div style={{ fontSize: 14, fontWeight: 600, color: '#f0f4f8' }}>{s.nome}</div><div style={{ fontSize: 11, color: '#6b7f93' }}>@{s.username}</div></div>
                     </div>
                   </td>
-                  <td style={{ padding: '14px 18px', fontSize: 13, fontWeight: 500, color: '#f0f4f8' }}>{s.cargo}</td>
+                  <td style={{ padding: '14px 18px' }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: getCargoCor(s.cargo) }}>{s.cargo}</span>
+                  </td>
                   <td style={{ padding: '14px 18px' }}><SetorBadges setor={s.setor} /></td>
                   <td style={{ padding: '14px 18px' }}>
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 99, fontSize: 11, fontWeight: 600, color: s.online ? '#00e676' : '#a8b8c8', background: s.online ? 'rgba(0,230,118,0.12)' : 'rgba(255,255,255,0.05)', border: `1px solid ${s.online ? 'rgba(0,230,118,0.2)' : '#1e2d3d'}` }}>
