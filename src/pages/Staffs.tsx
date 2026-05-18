@@ -16,7 +16,8 @@ const CARGO_CORES: Record<string, string> = {
   'Moderator': '#3d5afe',
   'Support': '#00e676',
   'Helper': '#d500f9',
-  'CEO': '#ffd700',
+  'CEO': '#c8d0d8',
+  'C-': '#c8d0d8',
   'Diretor': '#ff6348',
   'Trial': '#a8b8c8',
 }
