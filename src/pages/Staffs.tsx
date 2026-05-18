@@ -10,14 +10,15 @@ const SC: Record<string,string> = {Ilegal:'#ff4757',Legal:'#2ed573',Policia:'#1e
 
 const CARGO_CORES: Record<string, string> = {
   'Head Staff': '#00e5ff',
+  'HS': '#00e5ff',
   'Administrator': '#ff1744',
+  'Admin': '#ff1744',
   'Moderator': '#3d5afe',
   'Support': '#00e676',
   'Helper': '#d500f9',
   'CEO': '#ffd700',
   'Diretor': '#ff6348',
   'Trial': '#a8b8c8',
-  'HS': '#eccc68',
 }
 
 function getCargoCor(cargo: string): string {
