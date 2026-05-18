@@ -9,14 +9,13 @@ const SETORES = ['Ilegal','Legal','Policia','Denuncia','Kids','SS','Evento','Cri
 const SC: Record<string,string> = {Ilegal:'#ff4757',Legal:'#2ed573',Policia:'#1e90ff',Denuncia:'#ff6348',Kids:'#ff6eb4',SS:'#eccc68',Evento:'#4facfe',Criadores:'#b388ff',Administração:'#ffa502',Suporte:'#00e676'}
 
 const CARGO_CORES: Record<string, string> = {
+  'Head Staff': '#00e5ff',
+  'Administrator': '#ff1744',
+  'Moderator': '#3d5afe',
+  'Support': '#00e676',
+  'Helper': '#d500f9',
   'CEO': '#ffd700',
-  'Administrador': '#ffa502',
-  'Administrador-Chefe': '#ff6348',
-  'Diretor': '#ff4757',
-  'Moderador': '#00e676',
-  'Moderador Sênior': '#2ed573',
-  'Suporte': '#4facfe',
-  'Helper': '#b388ff',
+  'Diretor': '#ff6348',
   'Trial': '#a8b8c8',
   'HS': '#eccc68',
 }
