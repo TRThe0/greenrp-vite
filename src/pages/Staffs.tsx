@@ -75,12 +75,12 @@ export default function Staffs() {
       (!filterStatus || (filterStatus === 'online' && s.online) || (filterStatus === 'offline' && !s.online))
   })
 
-  function openAdd() { setEditing(null); setForm({ Disponibilidade: 20, pct: 10, setores: ['Suporte'], perm: 'staff', entrada: new Date().toISOString().slice(0, 10) }); setModal(true) }
+  function openAdd() { setEditing(null); setForm({ carga: 20, pct: 10, setores: ['Suporte'], perm: 'staff', entrada: new Date().toISOString().slice(0, 10) }); setModal(true) }
   function openEdit(s: any) { setEditing(s); setForm({ ...s, senha: '', setores: Array.isArray(s.setor) ? s.setor : [s.setor] }); setModal(true) }
   function openPromo(s: any) { setPromovendo(s); setPromoForm({ cargo: s.cargo, setores: Array.isArray(s.setor) ? s.setor : [s.setor] }); setModalPromo(true) }
 
   async function save() {
-    const payload = { nome: form.nome, username: form.username, cargo: form.cargo, setor: form.setores || ['Suporte'], Disponibilidade: form.Disponibilidade, Disponibilidade_max: form._max || null, perm: form.perm, cupom: form.cupom?.toUpperCase(), pct: Number(form.pct), entrada: form.entrada, ultima_promo: form.ultima_promo || null, id_rp: form.id_rp ? Number(form.id_rp) : null }
+    const payload = { nome: form.nome, username: form.username, cargo: form.cargo, setor: form.setores || ['Suporte'], carga: form.carga, carga_max: form.carga_max || null, perm: form.perm, cupom: form.cupom?.toUpperCase(), pct: Number(form.pct), entrada: form.entrada, ultima_promo: form.ultima_promo || null, id_rp: form.id_rp ? Number(form.id_rp) : null }
     if (editing) {
       if (form.senha) Object.assign(payload, { senha: hashPass(form.senha) })
       await supabase.from('staffs').update(payload).eq('id', editing.id)
@@ -136,7 +136,7 @@ export default function Staffs() {
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead><tr style={{ background: '#161f2a' }}>
-              {['Staff', 'Cargo', 'Setor(es)', 'Status', 'ID RP', 'Disponibilidade', 'Cupom', 'Entrada', 'Última Promoção', 'Ações'].map(h => (
+              {['Staff', 'Cargo', 'Setor(es)', 'Status', 'ID RP', 'Carga', 'Cupom', 'Entrada', 'Última Promoção', 'Ações'].map(h => (
                 <th key={h} style={{ padding: '12px 18px', textAlign: 'left', fontSize: 11, fontWeight: 600, color: '#6b7f93', letterSpacing: '0.8px', textTransform: 'uppercase', borderBottom: '1px solid #1e2d3d', whiteSpace: 'nowrap' }}>{h}</th>
               ))}
             </tr></thead>
@@ -164,7 +164,7 @@ export default function Staffs() {
                     {s.id_rp ? <span style={{ fontFamily: 'monospace', fontSize: 13, fontWeight: 700, color: '#4facfe', background: 'rgba(79,172,254,0.1)', border: '1px solid rgba(79,172,254,0.2)', borderRadius: 6, padding: '3px 10px' }}>{s.id_rp}</span> : <span style={{ color: '#3a4a5a', fontSize: 13 }}>—</span>}
                   </td>
                   <td style={{ padding: '14px 18px', fontSize: 13, color: '#f0f4f8' }}>
-                    {s.Disponibilidade_max ? `${s.Disponibilidade} - ${s.Disponibilidade_max}` : `${s.Disponibilidade}`}
+                    {s.carga_max ? `${s.carga} - ${s.carga_max}` : `${s.carga}`}
                   </td>
                   <td style={{ padding: '14px 18px' }}><span style={{ fontFamily: 'monospace', fontSize: 12, fontWeight: 700, color: '#ffa502' }}>{s.cupom || '—'}</span>{s.cupom && <span style={{ fontSize: 11, color: '#6b7f93', marginLeft: 6 }}>{s.pct}%</span>}</td>
                   <td style={{ padding: '14px 18px', fontSize: 13, color: '#a8b8c8' }}>{formatDate(s.entrada)}</td>
@@ -193,8 +193,8 @@ export default function Staffs() {
           <div><label style={{ fontSize: 12, color: '#6b7f93', display: 'block', marginBottom: 6 }}>Cargo</label><input style={inp} value={form.cargo || ''} onChange={sf('cargo')} placeholder="Ex: Moderador" /></div>
           <div><label style={{ fontSize: 12, color: '#6b7f93', display: 'block', marginBottom: 6 }}>Permissão</label><select style={inp} value={form.perm || ''} onChange={sf('perm')}><option value="staff">Staff</option><option value="admin">Admin</option></select></div>
           <div style={{ gridColumn: '1/-1' }}><label style={{ fontSize: 12, color: '#6b7f93', display: 'block', marginBottom: 6 }}>Setores <span style={{ color: '#4facfe' }}>(selecione um ou mais)</span></label><SetorPicker value={form.setores || []} onChange={v => setForm((f: any) => ({ ...f, setores: v }))} /></div>
-          <div><label style={{ fontSize: 12, color: '#6b7f93', display: 'block', marginBottom: 6 }}>Mín. Horas/sem</label><input style={inp} type="text" value={form.Disponibilidade || ''} onChange={sf('Disponibilidade')} placeholder="Ex: 18h" /></div>
-          <div><label style={{ fontSize: 12, color: '#6b7f93', display: 'block', marginBottom: 6 }}>Máx. Horas/sem</label><input style={inp} type="text" value={form.Disponibilidade_max || ''} onChange={sf('Disponibilidade_max')} placeholder="Ex: 20h" /></div>
+          <div><label style={{ fontSize: 12, color: '#6b7f93', display: 'block', marginBottom: 6 }}>Mín. Horas/sem</label><input style={inp} type="text" value={form.carga || ''} onChange={sf('carga')} placeholder="Ex: 18h" /></div>
+          <div><label style={{ fontSize: 12, color: '#6b7f93', display: 'block', marginBottom: 6 }}>Máx. Horas/sem</label><input style={inp} type="text" value={form.carga_max || ''} onChange={sf('carga_max')} placeholder="Ex: 20h" /></div>
           <div><label style={{ fontSize: 12, color: '#6b7f93', display: 'block', marginBottom: 6 }}>ID do RP</label><input style={inp} type="number" value={form.id_rp || ''} onChange={sf('id_rp')} placeholder="Ex: 4821" /></div>
           <div><label style={{ fontSize: 12, color: '#6b7f93', display: 'block', marginBottom: 6 }}>Cupom</label><input style={inp} value={form.cupom || ''} onChange={e => setForm((f: any) => ({ ...f, cupom: e.target.value.toUpperCase() }))} placeholder="STAFFCODE" /></div>
           <div><label style={{ fontSize: 12, color: '#6b7f93', display: 'block', marginBottom: 6 }}>% Cupom</label><input style={inp} type="number" value={form.pct || ''} onChange={sf('pct')} placeholder="10" /></div>
