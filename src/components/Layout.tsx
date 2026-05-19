@@ -22,8 +22,15 @@ export default function Layout({ children }: { children: ReactNode }) {
   const page = location.pathname.replace('/', '')
 
   useEffect(() => {
-    if (!session) { navigate('/login'); return }
-    supabase.from('staffs').select('id').eq('online', true).then(({ data }) => setOnline(data?.length || 0))
+    if (!session) return
+    // Atualiza ultimo_acesso agora e a cada 5 minutos
+    async function heartbeat() {
+      await supabase.from('staffs').update({ ultimo_acesso: new Date().toISOString() }).eq('id', session!.userId)
+    }
+    heartbeat()
+    const interval = setInterval(heartbeat, 5 * 60 * 1000)
+    return () => clearInterval(interval)
+  }, [session])
     const chk = () => setMobile(window.innerWidth < 900)
     chk(); window.addEventListener('resize', chk); return () => window.removeEventListener('resize', chk)
   }, [])
@@ -45,7 +52,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <div style={{ padding: '22px 18px 18px', borderBottom: '1px solid #1e2d3d' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ width: 38, height: 38, borderRadius: 10, background: 'linear-gradient(135deg,#00e676,#00c853)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: 16, color: '#080c10', flexShrink: 0 }}>G</div>
-            <div><div style={{ fontFamily: 'Syne,sans-serif', fontSize: 16, fontWeight: 700, color: '#f0f4f8' }}>Green RP</div><div style={{ fontSize: 11, color: '#6b7f93' }}>Painel Staff</div></div>
+            <div><div style={{ fontFamily: 'Syne,sans-serif', fontSize: 16, fontWeight: 700, color: '#f0f4f8' }}>Green RP</div><div style={{ fontSize: 11, color: '#6b7f93' }}>Staff Panel</div></div>
           </div>
         </div>
         <nav style={{ flex: 1, padding: 10 }}>
