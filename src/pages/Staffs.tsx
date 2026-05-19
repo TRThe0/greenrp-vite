@@ -11,12 +11,13 @@ const SC: Record<string,string> = {Ilegal:'#ff4757',Legal:'#2ed573',Policia:'#1e
 const CARGO_CORES: Record<string, string> = {
   'Head Staff': '#00e5ff',
   'HS': '#00e5ff',
+  'Administrator': '#ff1744',
   'Admin': '#ff1744',
   'Moderator': '#3d5afe',
-  'Support': '#07f713',
+  'Support': '#00e676',
   'Helper': '#d500f9',
-  'CEO': '#363636',
-  'C-': '#3a3a3a',
+  'CEO': '#c8d0d8',
+  'C-': '#c8d0d8',
   'Diretor': '#ff6348',
   'Trial': '#a8b8c8',
 }
@@ -82,11 +83,24 @@ export default function Staffs() {
   function openPromo(s: any) { setPromovendo(s); setPromoForm({ cargo: s.cargo, setores: Array.isArray(s.setor) ? s.setor : [s.setor] }); setModalPromo(true) }
 
   async function save() {
-    const payload = { nome: form.nome, username: form.username, cargo: form.cargo, setor: form.setores || ['Suporte'], carga: form.carga, carga_max: form.carga_max || null, perm: form.perm, cupom: form.cupom?.toUpperCase(), pct: Number(form.pct), entrada: form.entrada, ultima_promo: form.ultima_promo || null, id_rp: form.id_rp ? Number(form.id_rp) : null }
+    const payload: any = { nome: form.nome, username: form.username, cargo: form.cargo, setor: form.setores || ['Suporte'], carga: form.carga, carga_max: form.carga_max || null, perm: form.perm, cupom: form.cupom?.toUpperCase(), pct: Number(form.pct), entrada: form.entrada, ultima_promo: form.ultima_promo || null, id_rp: form.id_rp ? Number(form.id_rp) : null }
     if (editing) {
-      if (form.senha) Object.assign(payload, { senha: hashPass(form.senha) })
+      if (form.senha) payload.senha = hashPass(form.senha)
+      const labels: Record<string, string> = { nome:'Nome', cargo:'Cargo', perm:'Permissão', cupom:'Cupom', pct:'% Cupom', carga:'Disponibilidade', carga_max:'Disp. Máx', id_rp:'ID RP', entrada:'Entrada', ultima_promo:'Última Promoção', username:'Usuário' }
+      const alteracoes: string[] = []
+      for (const key of Object.keys(labels)) {
+        const antes = editing[key]
+        const depois = payload[key]
+        if (String(antes ?? '') !== String(depois ?? '')) {
+          alteracoes.push(`${labels[key]}: <em>${antes || '—'}</em> → <strong>${depois || '—'}</strong>`)
+        }
+      }
+      if (form.senha) alteracoes.push('Senha alterada')
+      const logMsg = alteracoes.length > 0
+        ? `<strong>${session?.nome}</strong> editou <strong>${form.nome}</strong> — ${alteracoes.join(' | ')}`
+        : `<strong>${session?.nome}</strong> editou <strong>${form.nome}</strong>`
       await supabase.from('staffs').update(payload).eq('id', editing.id)
-      await supabase.from('logs').insert({ type: 'edit', icon: 'Pen', color: 'amber', msg: `<strong>${session?.nome}</strong> editou <strong>${form.nome}</strong>` })
+      await supabase.from('logs').insert({ type: 'edit', icon: 'Pen', color: 'amber', msg: logMsg })
     } else {
       if (!form.senha) return alert('Defina uma senha')
       await supabase.from('staffs').insert({ ...payload, senha: hashPass(form.senha), online: false, usos: 0, valor_gerado: 0, comissao_total: 0 })
@@ -132,7 +146,7 @@ export default function Staffs() {
             <option value="">Todos Setores</option>{SETORES.map(s => <option key={s}>{s}</option>)}
           </select>
           <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} style={{ ...inp, width: 'auto', padding: '8px 28px 8px 12px', color: '#a8b8c8' }}>
-            <option value="">Todos Status</option><option value="online">Online</option><option value="offline">Offline</option>
+            <option value="">Todos Status</option><option value="online">Online</option><option value="ausente">Ausente</option><option value="offline">Offline</option>
           </select>
         </div>
         <div style={{ overflowX: 'auto' }}>
@@ -158,9 +172,27 @@ export default function Staffs() {
                   </td>
                   <td style={{ padding: '14px 18px' }}><SetorBadges setor={s.setor} /></td>
                   <td style={{ padding: '14px 18px' }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 99, fontSize: 11, fontWeight: 600, color: s.online ? '#00e676' : '#a8b8c8', background: s.online ? 'rgba(0,230,118,0.12)' : 'rgba(255,255,255,0.05)', border: `1px solid ${s.online ? 'rgba(0,230,118,0.2)' : '#1e2d3d'}` }}>
-                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: s.online ? '#00e676' : '#6b7f93', display: 'inline-block' }}></span>{s.online ? 'Online' : 'Offline'}
-                    </span>
+                    {(() => {
+                      let status = 'offline'
+                      if (s.online) {
+                        if (s.ultimo_acesso) {
+                          const mins = Math.floor((Date.now() - new Date(s.ultimo_acesso).getTime()) / 60000)
+                          status = mins > 30 ? 'ausente' : 'online'
+                        } else {
+                          status = 'online'
+                        }
+                      }
+                      const cfg = {
+                        online:  { label: 'Online',  color: '#00e676', bg: 'rgba(0,230,118,0.12)',   border: 'rgba(0,230,118,0.2)',  dot: '#00e676' },
+                        ausente: { label: 'Ausente', color: '#ffa502', bg: 'rgba(255,165,2,0.12)',   border: 'rgba(255,165,2,0.2)',  dot: '#ffa502' },
+                        offline: { label: 'Offline', color: '#a8b8c8', bg: 'rgba(255,255,255,0.05)', border: '#1e2d3d',             dot: '#6b7f93' },
+                      }[status]
+                      return (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 99, fontSize: 11, fontWeight: 600, color: cfg.color, background: cfg.bg, border: `1px solid ${cfg.border}` }}>
+                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: cfg.dot, display: 'inline-block' }}></span>{cfg.label}
+                        </span>
+                      )
+                    })()}
                   </td>
                   <td style={{ padding: '14px 18px' }}>
                     {s.id_rp ? <span style={{ fontFamily: 'monospace', fontSize: 13, fontWeight: 700, color: '#4facfe', background: 'rgba(79,172,254,0.1)', border: '1px solid rgba(79,172,254,0.2)', borderRadius: 6, padding: '3px 10px' }}>{s.id_rp}</span> : <span style={{ color: '#3a4a5a', fontSize: 13 }}>—</span>}
