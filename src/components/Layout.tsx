@@ -31,6 +31,8 @@ export default function Layout({ children }: { children: ReactNode }) {
     const interval = setInterval(heartbeat, 5 * 60 * 1000)
     return () => clearInterval(interval)
   }, [session])
+
+  useEffect(() => {
     const chk = () => setMobile(window.innerWidth < 900)
     chk(); window.addEventListener('resize', chk); return () => window.removeEventListener('resize', chk)
   }, [])
