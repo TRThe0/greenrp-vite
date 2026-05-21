@@ -20,7 +20,8 @@ export async function login(username: string, password: string, remember: boolea
   await supabase.from('staffs').update({ online: true, ultimo_acesso: new Date().toISOString() }).eq('id', data.id)
   await supabase.from('logs').insert({ type: 'login', icon: 'LogIn', color: 'blue', msg: `<strong>${data.nome}</strong> entrou no painel` })
   const session: Session = { userId: data.id, perm: data.perm, nome: data.nome, exp: Date.now() + 3600000 * 8 }
-  ;(remember ? localStorage : sessionStorage).setItem('grp_session', JSON.stringify(session))
+  localStorage.setItem('grp_session', JSON.stringify(session))
+  if (!remember) sessionStorage.setItem('grp_session', JSON.stringify(session))
   localStorage.setItem('grp_user', JSON.stringify({ ...data, senha: undefined }))
   return data
 }
