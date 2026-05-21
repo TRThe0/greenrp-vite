@@ -182,11 +182,12 @@ export default function Staffs() {
                           status = 'online'
                         }
                       }
-                      const cfg = {
+                      const cfgMap = {
                         online:  { label: 'Online',  color: '#00e676', bg: 'rgba(0,230,118,0.12)',   border: 'rgba(0,230,118,0.2)',  dot: '#00e676' },
                         ausente: { label: 'Ausente', color: '#ffa502', bg: 'rgba(255,165,2,0.12)',   border: 'rgba(255,165,2,0.2)',  dot: '#ffa502' },
                         offline: { label: 'Offline', color: '#a8b8c8', bg: 'rgba(255,255,255,0.05)', border: '#1e2d3d',             dot: '#6b7f93' },
-                      }[status]
+                      }
+                      const cfg = cfgMap[status as keyof typeof cfgMap] || cfgMap.offline
                       return (
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 99, fontSize: 11, fontWeight: 600, color: cfg.color, background: cfg.bg, border: `1px solid ${cfg.border}` }}>
                           <span style={{ width: 6, height: 6, borderRadius: '50%', background: cfg.dot, display: 'inline-block' }}></span>{cfg.label}
